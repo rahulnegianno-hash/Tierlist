@@ -21,6 +21,7 @@ body { font-family: Arial; background:#111; color:white; }
 .card {
   width:70px;
   text-align:center;
+  cursor:grab;
 }
 
 .card img {
@@ -50,15 +51,17 @@ body { font-family: Arial; background:#111; color:white; }
 <h2>🔥 Tier List</h2>
 <button onclick="downloadImage()">Download</button>
 
-<div class="tier M"><div class="label">Meri Jaan</div><div class="dropzone"></div></div>
-<div class="tier SSS"><div class="label">SSS</div><div class="dropzone"></div></div>
-<div class="tier A"><div class="label">A</div><div class="dropzone"></div></div>
-<div class="tier B"><div class="label">B</div><div class="dropzone"></div></div>
-<div class="tier C"><div class="label">C</div><div class="dropzone"></div></div>
-<div class="tier D"><div class="label">D</div><div class="dropzone"></div></div>
+<div id="capture">
+  <div class="tier M"><div class="label">Meri Jaan</div><div class="dropzone"></div></div>
+  <div class="tier SSS"><div class="label">SSS</div><div class="dropzone"></div></div>
+  <div class="tier A"><div class="label">A</div><div class="dropzone"></div></div>
+  <div class="tier B"><div class="label">B</div><div class="dropzone"></div></div>
+  <div class="tier C"><div class="label">C</div><div class="dropzone"></div></div>
+  <div class="tier D"><div class="label">D</div><div class="dropzone"></div></div>
 
-<h3>Characters</h3>
-<div id="pool" class="dropzone"></div>
+  <h3>Characters</h3>
+  <div id="pool" class="dropzone"></div>
+</div>
 
 <script>
 let dragged=null;
@@ -76,13 +79,17 @@ characters.forEach(c=>{
   card.className="card";
   card.draggable=true;
 
-  card.innerHTML=`
-    <img src="${c.img}">
-    <div>${c.name}</div>
-  `;
+  const img=new Image();
+  img.src=c.img;
+  img.crossOrigin="anonymous";
+
+  const name=document.createElement("div");
+  name.innerText=c.name;
+
+  card.appendChild(img);
+  card.appendChild(name);
 
   card.addEventListener("dragstart",()=>dragged=card);
-  card.addEventListener("touchstart",()=>dragged=card);
 
   pool.appendChild(card);
 });
@@ -90,17 +97,20 @@ characters.forEach(c=>{
 // drop system
 document.querySelectorAll(".dropzone").forEach(z=>{
   z.addEventListener("dragover",e=>e.preventDefault());
-  z.addEventListener("drop",()=>{ if(dragged) z.appendChild(dragged); });
-
-  z.addEventListener("touchend",()=>{ if(dragged) z.appendChild(dragged); });
+  z.addEventListener("drop",()=>{
+    if(dragged) z.appendChild(dragged);
+  });
 });
 
-// download
+// download (FIXED)
 function downloadImage(){
-  html2canvas(document.body).then(canvas=>{
+  html2canvas(document.getElementById("capture"), {
+    useCORS: true,
+    allowTaint: true
+  }).then(canvas=>{
     let a=document.createElement("a");
     a.download="tier.png";
-    a.href=canvas.toDataURL();
+    a.href=canvas.toDataURL("image/png");
     a.click();
   });
 }
