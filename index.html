@@ -8,7 +8,7 @@
 body { font-family: Arial; background:#111; color:white; }
 
 .tier { display:flex; margin:10px; padding:10px; border-radius:10px; }
-.label { width:80px; font-weight:bold; }
+.label { width:100px; font-weight:bold; }
 
 .dropzone {
   flex:1;
@@ -49,71 +49,219 @@ body { font-family: Arial; background:#111; color:white; }
 <body>
 
 <h2>🔥 Tier List</h2>
-<button onclick="downloadImage()">Download</button>
+<button onclick="downloadImage()">Download PNG</button>
 
-<div id="capture">
-  <div class="tier M"><div class="label">Meri Jaan</div><div class="dropzone"></div></div>
-  <div class="tier SSS"><div class="label">SSS</div><div class="dropzone"></div></div>
-  <div class="tier A"><div class="label">A</div><div class="dropzone"></div></div>
-  <div class="tier B"><div class="label">B</div><div class="dropzone"></div></div>
-  <div class="tier C"><div class="label">C</div><div class="dropzone"></div></div>
-  <div class="tier D"><div class="label">D</div><div class="dropzone"></div></div>
+<div class="tier M"><div class="label">Meri Jaan</div><div class="dropzone" data-tier="M"></div></div>
+<div class="tier SSS"><div class="label">SSS</div><div class="dropzone" data-tier="SSS"></div></div>
+<div class="tier A"><div class="label">A</div><div class="dropzone" data-tier="A"></div></div>
+<div class="tier B"><div class="label">B</div><div class="dropzone" data-tier="B"></div></div>
+<div class="tier C"><div class="label">C</div><div class="dropzone" data-tier="C"></div></div>
+<div class="tier D"><div class="label">D</div><div class="dropzone" data-tier="D"></div></div>
 
-  <h3>Characters</h3>
-  <div id="pool" class="dropzone"></div>
-</div>
+<h3>Characters</h3>
+<div id="pool" class="dropzone" data-tier="pool"></div>
 
 <script>
-let dragged=null;
+let dragged = null;
 
-const characters=[
-  {name:"Changli", img:"Changli.webp"},
-  {name:"Yinlin", img:"Yinlin.webp"}
+// ✅ PNG FORMAT (IMPORTANT)
+let characters = [
+{name:"Jinshi", img:"images/Jinshi.png", tier:"pool"},
+{name:"Yinlin", img:"images/Yinlin.png", tier:"pool"},
+{name:"Changli", img:"images/Changli.png", tier:"pool"},
+let characters = [
+
+/*====================== WW ======================*/
+{name:"Aemeath",img:"images/Aemeath.png",tier:"pool"},
+{name:"Augusta",img:"images/Augusta.png",tier:"pool"},
+{name:"Phrolova",img:"images/Phrolova.png",tier:"pool"},
+{name:"Shorekeeper",img:"images/Shorekeeper.png",tier:"pool"},
+{name:"Camellya",img:"images/Camellya.png",tier:"pool"},
+{name:"Cantarella",img:"images/Cantarella.png",tier:"pool"},
+{name:"Carlotta",img:"images/Carlotta.png",tier:"pool"},
+{name:"Chisa",img:"images/Chisa.png",tier:"pool"},
+{name:"Encore",img:"images/Encore.png",tier:"pool"},
+{name:"Iuno",img:"images/Iuno.png",tier:"pool"},
+{name:"Lynae",img:"images/Lynae.png",tier:"pool"},
+{name:"Phoebe",img:"images/Phoebe.png",tier:"pool"},
+{name:"Jinshi",img:"images/Jinshi.png",tier:"pool"},
+{name:"Zhezhi",img:"images/Zhezhi.png",tier:"pool"},
+{name:"Baizhi",img:"images/Baizhi.png",tier:"pool"},
+{name:"Sanhua",img:"images/Sanhua.png",tier:"pool"},
+{name:"Danjin",img:"images/Danjin.png",tier:"pool"},
+{name:"Taoqi",img:"images/Taoqi.png",tier:"pool"},
+{name:"Yangyang",img:"images/Yangyang.png",tier:"pool"},
+{name:"Sigrika",img:"images/Sigrika.png",tier:"pool"},
+{name:"Lucilla",img:"images/Lucilla.png",tier:"pool"},
+
+/*====================== ZZZ ======================*/
+{name:"Aria",img:"images/Aria.png",tier:"pool"},
+{name:"Ye Shunguang",img:"images/Ye Shunguang.png",tier:"pool"},
+{name:"Yidhari",img:"images/Yidhari.png",tier:"pool"},
+{name:"Lucia",img:"images/Lucia.png",tier:"pool"},
+{name:"Alice(ZZZ)",img:"images/Alice(ZZZ).png",tier:"pool"},
+{name:"Yuzuha",img:"images/Yuzuha.png",tier:"pool"},
+{name:"Yixuan",img:"images/Yixuan.png",tier:"pool"},
+{name:"Vivian",img:"images/Vivian.png",tier:"pool"},
+{name:"Trigger",img:"images/Trigger.png",tier:"pool"},
+{name:"Evelyn",img:"images/Evelyn.png",tier:"pool"},
+{name:"Astra",img:"images/Astra.png",tier:"pool"},
+{name:"Yanagi",img:"images/Yanagi.png",tier:"pool"},
+{name:"Jane",img:"images/Jane.png",tier:"pool"},
+{name:"Zhu Yuan",img:"images/Zhu Yuan.png",tier:"pool"},
+{name:"Nicole",img:"images/Nicole.png",tier:"pool"},
+{name:"Cissia",img:"images/Cissia.png",tier:"pool"},
+{name:"Miyabi",img:"images/Miyabi.png",tier:"pool"},
+{name:"Orphie",img:"images/Orphie.png",tier:"pool"},
+
+/*====================== GI ======================*/
+{name:"Faruzan",img:"images/Faruzan.png",tier:"pool"},
+{name:"Jean",img:"images/Jean.png",tier:"pool"},
+{name:"Sucrose",img:"images/Sucrose.png",tier:"pool"},
+{name:"Alice(GI)",img:"images/Alice(GI).png",tier:"pool"},
+{name:"Lauma",img:"images/Lauma.png",tier:"pool"},
+{name:"Ayaka",img:"images/Ayaka.png",tier:"pool"},
+{name:"Eula",img:"images/Eula.png",tier:"pool"},
+{name:"Ganyu",img:"images/Ganyu.png",tier:"pool"},
+{name:"Shenhe",img:"images/Shenhe.png",tier:"pool"},
+{name:"Skirk",img:"images/Skirk.png",tier:"pool"},
+{name:"Nefer",img:"images/Nefer.png",tier:"pool"},
+{name:"Yaoyao",img:"images/Yaoyao.png",tier:"pool"},
+{name:"Clorinde",img:"images/Clorinde.png",tier:"pool"},
+{name:"Keqing",img:"images/Keqing.png",tier:"pool"},
+{name:"Lisa",img:"images/Lisa.png",tier:"pool"},
+{name:"Raiden",img:"images/Raiden.png",tier:"pool"},
+{name:"Sara",img:"images/Sara.png",tier:"pool"},
+{name:"Yae Miko",img:"images/Yae Miko.png",tier:"pool"},
+{name:"Varesa",img:"images/Varesa.png",tier:"pool"},
+{name:"Chiori",img:"images/Chiori.png",tier:"pool"},
+{name:"Navia",img:"images/Navia.png",tier:"pool"},
+{name:"Noelle",img:"images/Noelle.png",tier:"pool"},
+{name:"Yun Jin",img:"images/Yun Jin.png",tier:"pool"},
+{name:"Zibai",img:"images/Zibai.png",tier:"pool"},
+{name:"Columbina",img:"images/Columbina.png",tier:"pool"},
+{name:"Nilou",img:"images/Nilou.png",tier:"pool"},
+{name:"Yelan",img:"images/Yelan.png",tier:"pool"},
+{name:"Mavuika",img:"images/Mavuika.png",tier:"pool"},
+{name:"Yoimiya",img:"images/Yoimiya.png",tier:"pool"},
+{name:"Sandrone",img:"images/Sandrone.png",tier:"pool"},
+
+/*====================== HSR ======================*/
+{name:"Ruan Mei",img:"images/Ruan Mei.png",tier:"pool"},
+{name:"Pela",img:"images/Pela.png",tier:"pool"},
+{name:"Jingliu",img:"images/Jingliu.png",tier:"pool"},
+{name:"The Herta",img:"images/The Herta.png",tier:"pool"},
+{name:"Evernight",img:"images/Evernight.png",tier:"pool"},
+{name:"Cyrene",img:"images/Cyrene.png",tier:"pool"},
+{name:"Fugue",img:"images/Fugue.png",tier:"pool"},
+{name:"Guinaifen",img:"images/Guinaifen.png",tier:"pool"},
+{name:"Himeko",img:"images/Himeko.png",tier:"pool"},
+{name:"Lingsha",img:"images/Lingsha.png",tier:"pool"},
+{name:"Sparxie",img:"images/Sparxie.png",tier:"pool"},
+{name:"The Dahlia",img:"images/The Dahlia.png",tier:"pool"},
+{name:"Acheron",img:"images/Acheron.png",tier:"pool"},
+{name:"Aglaea",img:"images/Aglaea.png",tier:"pool"},
+{name:"Kafka",img:"images/Kafka.png",tier:"pool"},
+{name:"Tingyun",img:"images/Tingyun.png",tier:"pool"},
+{name:"Black Swan",img:"images/Black Swan.png",tier:"pool"},
+{name:"Bronya",img:"images/Bronya.png",tier:"pool"},
+{name:"Huohuo",img:"images/Huohuo.png",tier:"pool"},
+{name:"Hyacine",img:"images/Hyacine.png",tier:"pool"},
+{name:"Saber",img:"images/Saber.png",tier:"pool"},
+{name:"Castorice",img:"images/Castorice.png",tier:"pool"},
+{name:"Cipher",img:"images/Cipher.png",tier:"pool"},
+{name:"Fu Xuan",img:"images/Fu Xuan.png",tier:"pool"},
+{name:"Jade",img:"images/Jade.png",tier:"pool"},
+{name:"Qingque",img:"images/Qingque.png",tier:"pool"},
+{name:"Sparkle",img:"images/Sparkle.png",tier:"pool"},
+{name:"Tribbie",img:"images/Tribbie.png",tier:"pool"},
+{name:"Xueyi",img:"images/Xueyi.png",tier:"pool"},
+{name:"March 7th",img:"images/March 7th.png",tier:"pool"},
+{name:"Yukong",img:"images/Yukong.png",tier:"pool"},
+{name:"Evanescia",img:"images/Evanescia.png",tier:"pool"},
+{name:"Hysilens",img:"images/Hysilens.png",tier:"pool"},
+{name:"Robin",img:"images/Robin.png",tier:"pool"},
+{name:"Sushang",img:"images/Sushang.png",tier:"pool"},
+{name:"Yao Guang",img:"images/Yao Guang.png",tier:"pool"},
+{name:"Yunli",img:"images/Yunli.png",tier:"pool"},
+
+ 
+/*================== Arknights Enfield ==================*/
+{name:"Laevatain",img:"images/Laevatain.png",tier:"pool"},
+{name:"Ember",img:"images/Ember.png",tier:"pool"},
+{name:"Perlica",img:"images/Perlica.png",tier:"pool"},
+{name:"Chen Qianyu",img:"images/Chen Qianyu.png",tier:"pool"},
+{name:"Ardelia",img:"images/Ardelia.png",tier:"pool"},
+{name:"Yvonne",img:"images/Yvonne.png",tier:"pool"},
+{name:"Last Rite",img:"images/Last Rite.png",tier:"pool"},
+{name:"Xaihi",img:"images/Xaihi.png",tier:"pool"},
+{name:"Avywenna",img:"images/Avywenna.png",tier:"pool"},
+{name:"Gilberta",img:"images/Gilberta.png",tier:"pool"},
+{name:"Fluorite",img:"images/Fluorite.png",tier:"pool"}
+
 ];
 
-const pool=document.getElementById("pool");
 
-// load characters
-characters.forEach(c=>{
-  const card=document.createElement("div");
-  card.className="card";
-  card.draggable=true;
+// LOAD DATA
+const saved = localStorage.getItem("tierData");
+if(saved){
+  characters = JSON.parse(saved);
+}
 
-  const img=new Image();
-  img.src = c.img + "?v=" + Date.now();
-  img.crossOrigin="anonymous";
+// RENDER
+function render(){
+  document.querySelectorAll(".dropzone").forEach(z => z.innerHTML = "");
 
-  const name=document.createElement("div");
-  name.innerText=c.name;
+  characters.forEach(c=>{
+    const card = document.createElement("div");
+    card.className = "card";
+    card.draggable = true;
 
-  card.appendChild(img);
-  card.appendChild(name);
+    card.innerHTML = `
+      <img src="${c.img}">
+      <div>${c.name}</div>
+    `;
 
-  card.addEventListener("dragstart",()=>dragged=card);
+    card.addEventListener("dragstart",()=>dragged=card);
 
-  pool.appendChild(card);
-});
+    const zone = document.querySelector(`[data-tier="${c.tier}"]`);
+    zone.appendChild(card);
+  });
+}
 
-// drop system
+// DROP SYSTEM
 document.querySelectorAll(".dropzone").forEach(z=>{
   z.addEventListener("dragover",e=>e.preventDefault());
+
   z.addEventListener("drop",()=>{
-    if(dragged) z.appendChild(dragged);
+    if(dragged){
+      z.appendChild(dragged);
+
+      const name = dragged.innerText.trim();
+      const tier = z.dataset.tier;
+
+      characters.forEach(c=>{
+        if(c.name === name){
+          c.tier = tier;
+        }
+      });
+
+      localStorage.setItem("tierData", JSON.stringify(characters));
+    }
   });
 });
 
-// download (FIXED)
+// DOWNLOAD PNG
 function downloadImage(){
-  html2canvas(document.getElementById("capture"), {
-    useCORS: true,
-    allowTaint: true
-  }).then(canvas=>{
+  html2canvas(document.body).then(canvas=>{
     let a=document.createElement("a");
     a.download="tier.png";
-    a.href=canvas.toDataURL("image/png");
+    a.href=canvas.toDataURL();
     a.click();
   });
 }
+
+render();
 </script>
 
 </body>
