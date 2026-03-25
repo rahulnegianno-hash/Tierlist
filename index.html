@@ -80,7 +80,7 @@ characters.forEach(c=>{
   card.draggable=true;
 
   const img=new Image();
-  img.src=c.img;
+  img.src = c.img + "?v=" + Date.now();
   img.crossOrigin="anonymous";
 
   const name=document.createElement("div");
