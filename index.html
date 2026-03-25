@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Tier List</title>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+<style>
+body { font-family: Arial; background: #111; color: white; }
+
+.tier { display:flex; margin:10px; padding:10px; border-radius:10px; }
+.label { width:80px; text-align:center; font-weight:bold; }
+.dropzone { display:flex; flex-wrap:wrap; gap:10px; min-height:80px; flex:1; }
+
+.card { width:70px; text-align:center; cursor:grab; }
+.card img { width:70px; height:70px; border-radius:10px; }
+
+.JAAN { background:#ff4d6d; }
+.SSS { background:#ffcc00; color:black; }
+.A { background:#4caf50; }
+.B { background:#2196f3; }
+.C { background:#ff9800; }
+.D { background:#f44336; }
+.LOLI { background:#9c6bff; }
+
+#pool { margin:20px; padding:10px; border:2px dashed white; min-height:100px; }
+button{margin:5px;padding:8px 12px;border:none;border-radius:6px;font-weight:bold;}
+</style>
+</head>
+
+<body>
+
+<h2 style="text-align:center;">🔥 My Tier List</h2>
+
+<button onclick="downloadImage()">📸 Download</button>
+<button onclick="shareLink()">🔗 Share</button>
+
+<div class="tier JAAN"><div class="label">Jaan ❤️</div><div class="dropzone"></div></div>
+<div class="tier SSS"><div class="label">SSS</div><div class="dropzone"></div></div>
+<div class="tier A"><div class="label">A</div><div class="dropzone"></div></div>
+<div class="tier B"><div class="label">B</div><div class="dropzone"></div></div>
+<div class="tier C"><div class="label">C</div><div class="dropzone"></div></div>
+<div class="tier D"><div class="label">D</div><div class="dropzone"></div></div>
+<div class="tier LOLI"><div class="label">Loli 🍼</div><div class="dropzone"></div></div>
+
+<h3>Characters</h3>
+<div id="pool" class="dropzone"></div>
+
+<script>
+let dragged=null;
+
+const characters=[
+{name:"Changli",img:"https://img.game8.co/4303105/4ba6389b5f9c601438375f2237705e67.png/show"},
+{name:"Yinlin",img:"https://img.game8.co/4303122/f2572c97e3f89983fde9bd2acd504717.png/show"},
+{name:"Jinshi",img:"https://img.game8.co/4303120/24763e189518dfc4e3f3aa650cacad2b.png/show"}
+];
+
+const pool=document.getElementById("pool");
+
+characters.forEach(char=>{
+  const card=document.createElement("div");
+  card.className="card";
+  card.draggable=true;
+  card.dataset.name=char.name;
+  card.innerHTML=`<img src="${char.img}"><div>${char.name}</div>`;
+  card.addEventListener("dragstart",()=>dragged=card);
+  pool.appendChild(card);
+});
+
+document.querySelectorAll(".dropzone").forEach(zone=>{
+  zone.addEventListener("dragover",e=>e.preventDefault());
+  zone.addEventListener("drop",()=>{
+    if(dragged){
+      zone.appendChild(dragged);
+      saveState();
+    }
+  });
+});
+
+function saveState(){
+  const data={};
+  document.querySelectorAll(".tier").forEach(tier=>{
+    const name=tier.querySelector(".label").innerText;
+    data[name]=[...tier.querySelectorAll(".card")].map(c=>c.dataset.name);
+  });
+  data["pool"]=[...document.querySelectorAll("#pool .card")].map(c=>c.dataset.name);
+  localStorage.setItem("tierData",JSON.stringify(data));
+}
+
+function loadState(data){
+  if(!data) return;
+  Object.keys(data).forEach(tierName=>{
+    let container;
+    if(tierName==="pool") container=pool;
+    else{
+      container=[...document.querySelectorAll(".tier")]
+        .find(t=>t.querySelector(".label").innerText===tierName)
+        ?.querySelector(".dropzone");
+    }
+    if(!container) return;
+
+    data[tierName].forEach(name=>{
+      const el=document.querySelector(`[data-name="${name}"]`);
+      if(el) container.appendChild(el);
+    });
+  });
+}
+
+// 🔥 SHARE SYSTEM
+function shareLink(){
+  const data=localStorage.getItem("tierData");
+  if(!data) return alert("Kuch save karo pehle!");
+
+  const encoded=btoa(data);
+  const url=location.origin+location.pathname+"?data="+encoded;
+
+  navigator.clipboard.writeText(url);
+  alert("Link copied 🔗");
+}
+
+// 🔥 LOAD FROM LINK
+window.onload=function(){
+  const params=new URLSearchParams(window.location.search);
+  const shared=params.get("data");
+
+  if(shared){
+    const decoded=JSON.parse(atob(shared));
+    loadState(decoded);
+  }else{
+    const saved=JSON.parse(localStorage.getItem("tierData"));
+    loadState(saved);
+  }
+};
+
+function downloadImage(){
+  html2canvas(document.body).then(canvas=>{
+    const link=document.createElement("a");
+    link.download="tierlist.png";
+    link.href=canvas.toDataURL();
+    link.click();
+  });
+}
+</script>
+
+</body>
+</html>
