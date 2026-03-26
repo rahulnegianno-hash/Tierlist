@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Tierlist Maker</title>
 
 <link rel="stylesheet" href="style.css">
@@ -16,18 +15,12 @@
 <p class="subtitle">Drag • Rank • Share</p>
 
 <div class="topbar">
-
   <input id="search" placeholder="Search characters...">
-
-  <!-- Upload -->
   <input type="file" id="upload" multiple accept="image/*">
 
   <button onclick="addTier()">➕ Add Tier</button>
-
   <button onclick="downloadImage()">📸 Download</button>
-
   <button onclick="exportData()">💾 Export</button>
-
   <button onclick="getShareLink()">🔗 Share</button>
 
   <label class="import-btn">
@@ -36,12 +29,10 @@
   </label>
 
   <button onclick="resetTier()">♻️ Reset</button>
-
 </div>
 
 <div id="tiers"></div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
