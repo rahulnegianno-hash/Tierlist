@@ -1,4 +1,4 @@
-const STORAGE_KEY = "tier_meta_v1";
+const STORAGE_KEY = "tier_meta_v2";
 
 let state = {
   characters: [],
@@ -8,27 +8,17 @@ let state = {
   search: ""
 };
 
-// LOAD
 function load(){
-  const params = new URLSearchParams(location.search);
-
-  if(params.get("data")){
-    state = JSON.parse(atob(params.get("data")));
-    return;
-  }
-
   const saved = localStorage.getItem(STORAGE_KEY);
   if(saved){
     state = JSON.parse(saved);
   }
 }
 
-// SAVE
 function save(){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
-// RENDER
 function render(){
   const container = document.getElementById("tiers");
   container.innerHTML = "";
@@ -40,14 +30,9 @@ function render(){
     div.className = "tier";
 
     div.innerHTML = `
-      <span ondblclick="renameTier('${tier}')" style="background:${color}">
-        ${tier}
-      </span>
-
+      <span style="background:${color}" ondblclick="renameTier('${tier}')">${tier}</span>
       ${tier !== "pool" ? `<button onclick="deleteTier('${tier}')">X</button>` : ""}
-
       <input type="color" value="${color}" onchange="changeColor('${tier}', this.value)">
-
       <div class="dropzone" data-tier="${tier}"></div>
     `;
 
@@ -58,7 +43,6 @@ function render(){
   attachDrop();
 }
 
-// CARDS
 function renderCards(){
   document.querySelectorAll(".dropzone").forEach(z=>z.innerHTML="");
 
@@ -80,29 +64,26 @@ function renderCards(){
       `;
 
       card.draggable = true;
-      card.addEventListener("dragstart",()=> state.draggedId = c.id);
+
+      card.addEventListener("dragstart", ()=>{
+        state.draggedId = c.id;
+        card.classList.add("dragging");
+      });
 
       zone.appendChild(card);
     });
 }
 
-// DROP SYSTEM (PC)
 function attachDrop(){
   document.querySelectorAll(".dropzone").forEach(zone=>{
 
     zone.addEventListener("dragover", e=>{
       e.preventDefault();
 
-      const afterElement = getDragAfterElement(zone, e.clientX);
       const dragging = document.querySelector(".dragging");
-
       if(!dragging) return;
 
-      if(afterElement == null){
-        zone.appendChild(dragging);
-      } else {
-        zone.insertBefore(dragging, afterElement);
-      }
+      zone.appendChild(dragging);
     });
 
     zone.addEventListener("drop", ()=>{
@@ -113,30 +94,11 @@ function attachDrop(){
   });
 }
 
-// DRAG POSITION
-function getDragAfterElement(container, x){
-  const cards = [...container.querySelectorAll(".card:not(.dragging)")];
-
-  return cards.reduce((closest, child)=>{
-    const box = child.getBoundingClientRect();
-    const offset = x - box.left - box.width / 2;
-
-    if(offset < 0 && offset > closest.offset){
-      return { offset: offset, element: child };
-    } else {
-      return closest;
-    }
-  }, { offset: Number.NEGATIVE_INFINITY }).element;
-}
-
-// UPDATE ORDER
 function updateAllOrders(){
   document.querySelectorAll(".dropzone").forEach(zone=>{
-
     const tier = zone.dataset.tier;
-    const cards = zone.querySelectorAll(".card");
 
-    cards.forEach((card, index)=>{
+    zone.querySelectorAll(".card").forEach((card,index)=>{
       const id = Number(card.dataset.id);
       const char = state.characters.find(c=>c.id === id);
 
@@ -145,54 +107,8 @@ function updateAllOrders(){
         char.order = index;
       }
     });
-
   });
 }
-
-// MOBILE TOUCH DRAG
-let touchItem = null;
-
-document.addEventListener("touchstart", e=>{
-  const card = e.target.closest(".card");
-  if(!card) return;
-
-  touchItem = card;
-  card.classList.add("dragging");
-});
-
-document.addEventListener("touchmove", e=>{
-  if(!touchItem) return;
-
-  const touch = e.touches[0];
-  const elem = document.elementFromPoint(touch.clientX, touch.clientY);
-
-  const zone = elem?.closest(".dropzone");
-  if(!zone) return;
-
-  const afterElement = getDragAfterElement(zone, touch.clientX);
-
-  if(afterElement == null){
-    zone.appendChild(touchItem);
-  } else {
-    zone.insertBefore(touchItem, afterElement);
-  }
-});
-
-document.addEventListener("touchend", ()=>{
-  if(!touchItem) return;
-
-  touchItem.classList.remove("dragging");
-  updateAllOrders();
-  save();
-  touchItem = null;
-});
-
-// DRAG STYLE
-document.addEventListener("dragstart", e=>{
-  if(e.target.classList.contains("card")){
-    e.target.classList.add("dragging");
-  }
-});
 
 document.addEventListener("dragend", e=>{
   if(e.target.classList.contains("card")){
@@ -200,7 +116,6 @@ document.addEventListener("dragend", e=>{
   }
 });
 
-// ADD TIER
 function addTier(){
   const name = prompt("Tier name:");
   if(!name) return;
@@ -210,23 +125,16 @@ function addTier(){
   render();
 }
 
-// DELETE TIER
 function deleteTier(tier){
-  if(!confirm("Delete tier?")) return;
-
   state.characters.forEach(c=>{
-    if(c.tier === tier){
-      c.tier = "pool";
-    }
+    if(c.tier === tier) c.tier = "pool";
   });
 
   state.tiers = state.tiers.filter(t=>t !== tier);
-
   save();
   render();
 }
 
-// RENAME
 function renameTier(oldName){
   const newName = prompt("Rename:", oldName);
   if(!newName) return;
@@ -243,20 +151,17 @@ function renameTier(oldName){
   render();
 }
 
-// COLOR
 function changeColor(tier, color){
   state.colors[tier] = color;
   save();
   render();
 }
 
-// SEARCH
 document.getElementById("search").addEventListener("input", e=>{
   state.search = e.target.value.toLowerCase();
   render();
 });
 
-// UPLOAD
 document.getElementById("upload").addEventListener("change", e=>{
   const files = Array.from(e.target.files);
 
@@ -287,10 +192,9 @@ document.getElementById("upload").addEventListener("change", e=>{
   });
 });
 
-// EXPORT
 function exportData(){
   const data = JSON.stringify(state);
-  const blob = new Blob([data], {type:"application/json"});
+  const blob = new Blob([data]);
 
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
@@ -298,7 +202,6 @@ function exportData(){
   a.click();
 }
 
-// IMPORT
 function importData(e){
   const file = e.target.files[0];
   const reader = new FileReader();
@@ -312,21 +215,18 @@ function importData(e){
   reader.readAsText(file);
 }
 
-// SHARE
 function getShareLink(){
   const data = btoa(JSON.stringify(state));
   const url = location.origin + location.pathname + "?data=" + data;
 
-  prompt("Copy this link:", url);
+  prompt("Copy link:", url);
 }
 
-// RESET
 function resetTier(){
   localStorage.removeItem(STORAGE_KEY);
   location.reload();
 }
 
-// DOWNLOAD
 function downloadImage(){
   html2canvas(document.body,{scale:2}).then(canvas=>{
     const a=document.createElement("a");
@@ -336,6 +236,5 @@ function downloadImage(){
   });
 }
 
-// INIT
 load();
 render();
