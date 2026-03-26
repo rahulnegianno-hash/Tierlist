@@ -48,7 +48,7 @@ function renderCards(){
 
   state.characters
     .filter(c=>c.name.toLowerCase().includes(state.search))
-    .sort((a,b)=>a.order - b.order)
+    .sort((a,b)=>(a.order || 0) - (b.order || 0)) // 🔥 FIX
     .forEach(c=>{
 
       const zone = document.querySelector(`[data-tier="${c.tier}"]`);
@@ -70,6 +70,10 @@ function renderCards(){
         card.classList.add("dragging");
       });
 
+      card.addEventListener("dragend", ()=>{
+        card.classList.remove("dragging");
+      });
+
       zone.appendChild(card);
     });
 }
@@ -78,43 +82,26 @@ function attachDrop(){
   document.querySelectorAll(".dropzone").forEach(zone=>{
 
     zone.addEventListener("dragover", e=>{
-      e.preventDefault();
-
-      const dragging = document.querySelector(".dragging");
-      if(!dragging) return;
-
-      zone.appendChild(dragging);
+      e.preventDefault(); // 🔥 IMPORTANT (NO append here)
     });
 
     zone.addEventListener("drop", ()=>{
-      updateAllOrders();
-      save();
-    });
+      if(state.draggedId == null) return;
 
-  });
-}
-
-function updateAllOrders(){
-  document.querySelectorAll(".dropzone").forEach(zone=>{
-    const tier = zone.dataset.tier;
-
-    zone.querySelectorAll(".card").forEach((card,index)=>{
-      const id = Number(card.dataset.id);
-      const char = state.characters.find(c=>c.id === id);
-
+      const char = state.characters.find(c=>c.id === state.draggedId);
       if(char){
-        char.tier = tier;
-        char.order = index;
+        char.tier = zone.dataset.tier;
+        char.order = Date.now(); // 🔥 FIX
       }
+
+      state.draggedId = null;
+
+      save();
+      render();
     });
+
   });
 }
-
-document.addEventListener("dragend", e=>{
-  if(e.target.classList.contains("card")){
-    e.target.classList.remove("dragging");
-  }
-});
 
 function addTier(){
   const name = prompt("Tier name:");
@@ -181,7 +168,7 @@ document.getElementById("upload").addEventListener("change", e=>{
         name,
         img: ev.target.result,
         tier:"pool",
-        order: Date.now()
+        order: Date.now() // 🔥 FIX
       });
 
       save();
