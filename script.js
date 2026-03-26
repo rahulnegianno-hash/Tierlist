@@ -31,12 +31,22 @@ function render(){
 
     div.innerHTML = `
       <span style="background:${color}" ondblclick="renameTier('${tier}')">${tier}</span>
-      ${tier !== "pool" ? `<button onclick="deleteTier('${tier}')">X</button>` : ""}
-      <input type="color" value="${color}" onchange="changeColor('${tier}', this.value)">
+      ${tier !== "pool" ? `<button data-tier="${tier}" class="delete-btn">X</button>` : ""}
+      <input type="color" value="${color}" data-tier="${tier}" class="color-picker">
       <div class="dropzone" data-tier="${tier}"></div>
     `;
 
     container.appendChild(div);
+  });
+
+  // delete btn
+  document.querySelectorAll(".delete-btn").forEach(btn=>{
+    btn.onclick = ()=> deleteTier(btn.dataset.tier);
+  });
+
+  // color picker
+  document.querySelectorAll(".color-picker").forEach(input=>{
+    input.onchange = ()=> changeColor(input.dataset.tier, input.value);
   });
 
   renderCards();
@@ -48,7 +58,7 @@ function renderCards(){
 
   state.characters
     .filter(c=>c.name.toLowerCase().includes(state.search))
-    .sort((a,b)=>(a.order || 0) - (b.order || 0)) // 🔥 FIX
+    .sort((a,b)=>(a.order || 0) - (b.order || 0))
     .forEach(c=>{
 
       const zone = document.querySelector(`[data-tier="${c.tier}"]`);
@@ -82,7 +92,18 @@ function attachDrop(){
   document.querySelectorAll(".dropzone").forEach(zone=>{
 
     zone.addEventListener("dragover", e=>{
-      e.preventDefault(); // 🔥 IMPORTANT (NO append here)
+      e.preventDefault();
+
+      const afterElement = getDragAfterElement(zone, e.clientX);
+      const dragging = document.querySelector(".dragging");
+
+      if(!dragging) return;
+
+      if(afterElement == null){
+        zone.appendChild(dragging);
+      } else {
+        zone.insertBefore(dragging, afterElement);
+      }
     });
 
     zone.addEventListener("drop", ()=>{
@@ -91,7 +112,7 @@ function attachDrop(){
       const char = state.characters.find(c=>c.id === state.draggedId);
       if(char){
         char.tier = zone.dataset.tier;
-        char.order = Date.now(); // 🔥 FIX
+        char.order = Date.now();
       }
 
       state.draggedId = null;
@@ -103,11 +124,34 @@ function attachDrop(){
   });
 }
 
+function getDragAfterElement(container, x){
+  const elements = [...container.querySelectorAll(".card:not(.dragging)")];
+
+  return elements.reduce((closest, child) => {
+    const box = child.getBoundingClientRect();
+    const offset = x - box.left - box.width / 2;
+
+    if(offset < 0 && offset > closest.offset){
+      return { offset: offset, element: child };
+    } else {
+      return closest;
+    }
+  }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+
 function addTier(){
-  const name = prompt("Tier name:");
+  let name = prompt("Tier name:");
   if(!name) return;
 
+  name = name.trim();
+
+  if(state.tiers.includes(name)){
+    alert("Already exists");
+    return;
+  }
+
   state.tiers.splice(state.tiers.length - 1, 0, name);
+
   save();
   render();
 }
@@ -168,7 +212,7 @@ document.getElementById("upload").addEventListener("change", e=>{
         name,
         img: ev.target.result,
         tier:"pool",
-        order: Date.now() // 🔥 FIX
+        order: Date.now()
       });
 
       save();
@@ -209,6 +253,20 @@ function getShareLink(){
   prompt("Copy link:", url);
 }
 
+function loadFromURL(){
+  const params = new URLSearchParams(location.search);
+  const data = params.get("data");
+
+  if(data){
+    try{
+      state = JSON.parse(atob(data));
+      save();
+    }catch(e){
+      console.error("Invalid data");
+    }
+  }
+}
+
 function resetTier(){
   localStorage.removeItem(STORAGE_KEY);
   location.reload();
@@ -224,4 +282,5 @@ function downloadImage(){
 }
 
 load();
+loadFromURL();
 render();
