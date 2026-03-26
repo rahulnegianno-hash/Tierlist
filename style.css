@@ -13,6 +13,15 @@ h1 {
   letter-spacing:1px;
 }
 
+/* SUBTITLE */
+.subtitle{
+  text-align:center;
+  color:#aaa;
+  margin-top:-10px;
+  margin-bottom:10px;
+  font-size:14px;
+}
+
 /* 🔥 TOPBAR */
 .topbar {
   display:flex;
@@ -22,6 +31,7 @@ h1 {
   margin:10px;
 }
 
+/* INPUT + BUTTON BASE */
 input, button {
   padding:8px 12px;
   border-radius:8px;
@@ -29,22 +39,30 @@ input, button {
   outline:none;
 }
 
+/* INPUT */
 input {
   background:#1f1f1f;
   color:white;
 }
 
 /* 🔥 BUTTON STYLE */
-button {
+button, .import-btn {
   background: linear-gradient(135deg,#2a2a2a,#3a3a3a);
   color:white;
   cursor:pointer;
   transition:0.2s;
+  border:none;
 }
 
-button:hover {
+/* HOVER */
+button:hover, .import-btn:hover {
   transform: translateY(-2px);
   background: linear-gradient(135deg,#444,#666);
+}
+
+/* IMPORT BUTTON FIX */
+.import-btn{
+  display:inline-block;
 }
 
 /* 🔥 TIER ROW */
@@ -62,7 +80,7 @@ button:hover {
 /* 🔥 TIER LABEL */
 .tier span {
   width:70px;
-  height:100%;
+  min-height:120px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -75,6 +93,7 @@ button:hover {
   margin-left:5px;
   background:red;
   border-radius:6px;
+  padding:4px 8px;
 }
 
 /* COLOR PICKER */
@@ -83,6 +102,7 @@ button:hover {
   height:35px;
   border:none;
   cursor:pointer;
+  margin-left:5px;
 }
 
 /* 🔥 DROP ZONE */
@@ -94,6 +114,7 @@ button:hover {
   flex-wrap:wrap;
   gap:8px;
   padding:10px;
+  align-items:flex-start;
 }
 
 /* 🔥 CARD */
@@ -103,6 +124,7 @@ button:hover {
   transition:0.2s;
 }
 
+/* HOVER EFFECT */
 .card:hover {
   transform: scale(1.1);
 }
@@ -120,6 +142,7 @@ button:hover {
   text-align:center;
   margin-top:3px;
   color:#ddd;
+  word-break:break-word;
 }
 
 /* DRAGGING */
@@ -128,26 +151,10 @@ button:hover {
   transform: scale(1.1);
 }
 
-/* 📱 MOBILE */
+/* 📱 MOBILE FIX */
 @media(max-width:600px){
   .card { width:60px; }
-  .tier span { width:50px; }
-}
-
-.subtitle{
-  text-align:center;
-  color:#aaa;
-  margin-top:-10px;
-  margin-bottom:10px;
-}
-
-.import-btn{
-  background:#333;
-  padding:8px 12px;
-  border-radius:8px;
-  cursor:pointer;
-}
-
-.import-btn:hover{
-  background:#555;
+  .tier span { width:50px; font-size:14px; }
+  .topbar { gap:6px; }
+  input, button { padding:6px 8px; font-size:12px; }
 }
