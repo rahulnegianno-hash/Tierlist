@@ -13,16 +13,14 @@
 <body>
 
 <h1>🔥 Tierlist Maker</h1>
-<p style="text-align:center;color:#aaa;margin-top:-10px;">
-  Drag • Rank • Share
-</p>
+<p class="subtitle">Drag • Rank • Share</p>
 
 <div class="topbar">
 
   <input id="search" placeholder="Search characters...">
 
-  <!-- ✅ ONLY ONE UPLOAD -->
-  <input type="file" id="upload" multiple>
+  <!-- ✅ IMAGE UPLOAD -->
+  <input type="file" id="upload" multiple accept="image/*">
 
   <button onclick="addTier()">➕ Add Tier</button>
 
@@ -32,8 +30,8 @@
 
   <button onclick="getShareLink()">🔗 Share</button>
 
-  <!-- OPTIONAL IMPORT -->
-  <label style="background:#333;padding:6px;border-radius:6px;cursor:pointer;">
+  <!-- ✅ IMPORT FIX -->
+  <label class="import-btn">
     📂 Import
     <input type="file" onchange="importData(event)" hidden>
   </label>
