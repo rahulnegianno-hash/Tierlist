@@ -1,15 +1,19 @@
 body {
   margin:0;
-  font-family: Arial;
-  background:#0f0f0f;
+  font-family: 'Segoe UI', Arial;
+  background: linear-gradient(135deg,#0f0f0f,#1a1a2e);
   color:white;
 }
 
+/* 🔥 TITLE */
 h1 {
   text-align:center;
-  margin:10px;
+  margin:15px;
+  font-size:32px;
+  letter-spacing:1px;
 }
 
+/* 🔥 TOPBAR */
 .topbar {
   display:flex;
   gap:10px;
@@ -19,77 +23,113 @@ h1 {
 }
 
 input, button {
-  padding:8px;
-  border-radius:6px;
+  padding:8px 12px;
+  border-radius:8px;
   border:none;
+  outline:none;
 }
 
+input {
+  background:#1f1f1f;
+  color:white;
+}
+
+/* 🔥 BUTTON STYLE */
 button {
-  background:#222;
+  background: linear-gradient(135deg,#2a2a2a,#3a3a3a);
   color:white;
   cursor:pointer;
+  transition:0.2s;
 }
 
 button:hover {
-  background:#444;
+  transform: translateY(-2px);
+  background: linear-gradient(135deg,#444,#666);
 }
 
+/* 🔥 TIER ROW */
 .tier {
   display:flex;
   align-items:center;
-  margin:10px;
-  border-radius:8px;
+  margin:12px;
+  border-radius:12px;
   overflow:hidden;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
 }
 
+/* 🔥 TIER LABEL */
 .tier span {
-  width:60px;
+  width:70px;
+  height:100%;
   display:flex;
   align-items:center;
   justify-content:center;
   font-weight:bold;
+  font-size:18px;
 }
 
+/* DELETE BUTTON */
 .tier button {
   margin-left:5px;
   background:red;
-  color:white;
-}
-
-.dropzone {
-  flex:1;
-  background:#1a1a1a;
-  min-height:120px;
-  display:flex;
-  flex-wrap:wrap;
-  gap:6px;
-  padding:6px;
-}
-
-.card {
-  width:70px;
-  cursor: grab;
-}
-
-.card:active {
-  cursor: grabbing;
-}
-
-.card img {
-  width:100%;
   border-radius:6px;
 }
 
+/* COLOR PICKER */
+.tier input[type="color"] {
+  width:35px;
+  height:35px;
+  border:none;
+  cursor:pointer;
+}
+
+/* 🔥 DROP ZONE */
+.dropzone {
+  flex:1;
+  background: rgba(0,0,0,0.4);
+  min-height:120px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  padding:10px;
+}
+
+/* 🔥 CARD */
+.card {
+  width:75px;
+  cursor: grab;
+  transition:0.2s;
+}
+
+.card:hover {
+  transform: scale(1.1);
+}
+
+/* IMAGE */
+.card img {
+  width:100%;
+  border-radius:10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+}
+
+/* NAME */
 .card div {
   font-size:11px;
   text-align:center;
+  margin-top:3px;
+  color:#ddd;
 }
 
+/* DRAGGING */
 .card.dragging {
   opacity:0.5;
+  transform: scale(1.1);
 }
 
+/* 📱 MOBILE */
 @media(max-width:600px){
-  .card { width:55px; }
-  .tier span { width:40px; }
+  .card { width:60px; }
+  .tier span { width:50px; }
 }
