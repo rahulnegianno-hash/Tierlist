@@ -1,234 +1,138 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tier List Maker</title>
+
+<!-- CSS -->
+<link rel="stylesheet" href="style.css">
+
+<!-- html2canvas -->
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 <style>
+/* 🔥 Quick UI Upgrade (extra polish) */
 body {
+  margin:0;
   font-family: Arial;
   background:#111;
   color:white;
   text-align:center;
 }
 
-h2 { margin-top:10px; }
+h1 {
+  margin:10px;
+}
 
-.controls {
-  margin:15px;
+.topbar {
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+
+input, button {
+  padding:8px;
+  border:none;
+  border-radius:6px;
 }
 
 button {
-  padding:8px 12px;
-  margin:5px;
-  border:none;
-  border-radius:6px;
   cursor:pointer;
+  background:#444;
+  color:white;
+}
+
+button:hover {
+  background:#666;
 }
 
 .tier {
   display:flex;
-  margin:10px;
-  padding:10px;
-  border-radius:10px;
   align-items:center;
+  margin:10px;
 }
 
-.label {
-  width:120px;
+.tier span {
+  width:60px;
   font-weight:bold;
+  font-size:20px;
 }
 
 .dropzone {
   flex:1;
+  min-height:100px;
+  background:#222;
+  border:2px dashed #444;
   display:flex;
   flex-wrap:wrap;
-  gap:10px;
-  min-height:80px;
+  gap:5px;
+  padding:5px;
 }
 
 .card {
-  width:75px;
-  text-align:center;
-  cursor:grab;
-  transition:0.2s;
-}
-
-.card:hover {
-  transform: scale(1.1);
+  width:70px;
 }
 
 .card img {
-  width:70px;
-  height:70px;
-  border-radius:10px;
-  object-fit:cover;
+  width:100%;
+  border-radius:6px;
 }
 
-.M {background:#ff4d6d;}
-.SSS {background:#ffcc00; color:black;}
-.A {background:#4caf50;}
-.B {background:#2196f3;}
-.C {background:#ff9800;}
-.D {background:#f44336;}
+.card div {
+  font-size:12px;
+}
 
-#pool {
-  margin:20px;
-  border:2px dashed white;
-  padding:10px;
-  min-height:100px;
+/* 📱 Mobile */
+@media(max-width:600px){
+  .card { width:55px; }
+  .tier span { width:40px; }
 }
 </style>
+
 </head>
 
 <body>
 
-<h2>🔥 Tier List Maker</h2>
+<h1>🔥 Tier List Maker</h1>
 
-<div class="controls">
-  <button onclick="downloadImage()">Download PNG</button>
+<div class="topbar">
+  <input id="search" placeholder="Search character...">
+  <input type="file" id="upload">
+  <button onclick="downloadImage()">Download</button>
   <button onclick="resetTier()">Reset</button>
-  <input type="file" id="upload" accept="image/*">
 </div>
 
-<div class="tier M"><div class="label">Meri Jaan</div><div class="dropzone" data-tier="M"></div></div>
-<div class="tier SSS"><div class="label">SSS</div><div class="dropzone" data-tier="SSS"></div></div>
-<div class="tier A"><div class="label">A</div><div class="dropzone" data-tier="A"></div></div>
-<div class="tier B"><div class="label">B</div><div class="dropzone" data-tier="B"></div></div>
-<div class="tier C"><div class="label">C</div><div class="dropzone" data-tier="C"></div></div>
-<div class="tier D"><div class="label">D</div><div class="dropzone" data-tier="D"></div></div>
+<!-- TIERS -->
+<div class="tier">
+  <span>S</span>
+  <div class="dropzone" data-tier="S"></div>
+</div>
 
-<h3>Characters</h3>
-<div id="pool" class="dropzone" data-tier="pool"></div>
+<div class="tier">
+  <span>A</span>
+  <div class="dropzone" data-tier="A"></div>
+</div>
 
-<script>
+<div class="tier">
+  <span>B</span>
+  <div class="dropzone" data-tier="B"></div>
+</div>
 
-let dragged = null;
+<div class="tier">
+  <span>C</span>
+  <div class="dropzone" data-tier="C"></div>
+</div>
 
-// 🔥 CHARACTER DATA
-let characters = [
+<div class="tier">
+  <span>POOL</span>
+  <div class="dropzone" data-tier="pool"></div>
+</div>
 
-{id:1,name:"Jinshi",img:"images/Jinshi.png",tier:"pool"},
-{id:2,name:"Changli",img:"images/Changli.png",tier:"pool"},
-{id:3,name:"Yinlin",img:"images/Yinlin.png",tier:"pool"},
-
-{id:4,name:"Aemeath",img:"images/Aemeath.png",tier:"pool"},
-{id:5,name:"Augusta",img:"images/Augusta.png",tier:"pool"},
-{id:6,name:"Phrolova",img:"images/Phrolova.png",tier:"pool"},
-{id:7,name:"Shorekeeper",img:"images/Shorekeeper.png",tier:"pool"},
-{id:8,name:"Camellya",img:"images/Camellya.png",tier:"pool"},
-{id:9,name:"Cantarella",img:"images/Cantarella.png",tier:"pool"},
-{id:10,name:"Carlotta",img:"images/Carlotta.png",tier:"pool"},
-{id:11,name:"Chisa",img:"images/Chisa.png",tier:"pool"},
-{id:12,name:"Encore",img:"images/Encore.png",tier:"pool"},
-{id:13,name:"Iuno",img:"images/Iuno.png",tier:"pool"},
-{id:14,name:"Lynae",img:"images/Lynae.png",tier:"pool"},
-{id:15,name:"Phoebe",img:"images/Phoebe.png",tier:"pool"}
-
-];
-
-
-// LOAD SAVE
-const saved = localStorage.getItem("tierData");
-if(saved){
-  characters = JSON.parse(saved);
-}
-
-// RENDER
-function render(){
-  document.querySelectorAll(".dropzone").forEach(z => z.innerHTML = "");
-
-  characters.forEach(c=>{
-    const card = document.createElement("div");
-    card.className = "card";
-    card.draggable = true;
-
-    card.innerHTML = `
-      <img src="${c.img}">
-      <div>${c.name}</div>
-    `;
-
-    card.addEventListener("dragstart",()=>dragged=card);
-
-    const zone = document.querySelector(`[data-tier="${c.tier}"]`);
-    zone.appendChild(card);
-  });
-}
-
-// DROP SYSTEM
-document.querySelectorAll(".dropzone").forEach(z=>{
-  z.addEventListener("dragover",e=>e.preventDefault());
-
-  z.addEventListener("drop",()=>{
-    if(dragged){
-      z.appendChild(dragged);
-
-      const name = dragged.querySelector("div").innerText;
-      const tier = z.dataset.tier;
-
-      characters.forEach(c=>{
-        if(c.name === name){
-          c.tier = tier;
-        }
-      });
-
-      sortTier(tier);
-      localStorage.setItem("tierData", JSON.stringify(characters));
-    }
-  });
-});
-
-// SORT
-function sortTier(tier){
-  const zone = document.querySelector(`[data-tier="${tier}"]`);
-  const cards = Array.from(zone.children);
-
-  cards.sort((a,b)=>{
-    return a.innerText.localeCompare(b.innerText);
-  });
-
-  cards.forEach(c=>zone.appendChild(c));
-}
-
-// RESET
-function resetTier(){
-  localStorage.removeItem("tierData");
-  location.reload();
-}
-
-// IMAGE UPLOAD
-document.getElementById("upload").addEventListener("change", function(e){
-  const file = e.target.files[0];
-  if(!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function(event){
-    const newChar = {
-      name: "Custom " + Date.now(),
-      img: event.target.result,
-      tier: "pool"
-    };
-
-    characters.push(newChar);
-    localStorage.setItem("tierData", JSON.stringify(characters));
-    render();
-  };
-  reader.readAsDataURL(file);
-});
-
-// DOWNLOAD PNG
-function downloadImage(){
-  html2canvas(document.body).then(canvas=>{
-    let a=document.createElement("a");
-    a.download="tier.png";
-    a.href=canvas.toDataURL();
-    a.click();
-  });
-}
-
-render();
-
-</script>
+<!-- JS -->
+<script src="script.js"></script>
 
 </body>
 </html>
