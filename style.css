@@ -46,10 +46,17 @@ button, .import-btn {
 
 .dropzone {
   flex:1;
+  background: rgba(0,0,0,0.4);
+  min-height:120px;
   display:flex;
+
+  flex-wrap: wrap;        /* ✅ CHANGE */
   gap:8px;
   padding:10px;
-  overflow-x:auto;
+
+  align-items:flex-start;
+
+  overflow-x: hidden;     /* ❌ remove horizontal scroll */
 }
 
 .card {
