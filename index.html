@@ -3,9 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Tier List Maker</title>
 
 <link rel="stylesheet" href="style.css">
+
+<!-- html2canvas -->
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </head>
 
@@ -13,19 +16,32 @@
 
 <h1>🔥 Tier List Maker</h1>
 
+<!-- 🔥 TOP BAR -->
 <div class="topbar">
-  <input id="search" placeholder="Search...">
+
+  <input id="search" placeholder="Search characters...">
+
   <input type="file" id="upload" multiple>
-  <button onclick="downloadImage()">Download</button>
-  <button onclick="resetTier()">Reset</button>
+
+  <button onclick="addTier()">➕ Add Tier</button>
+
+  <button onclick="downloadImage()">📸 Download</button>
+
+  <button onclick="exportData()">💾 Export</button>
+
+  <button onclick="getShareLink()">🔗 Share</button>
+
+  <input type="file" onchange="importData(event)">
+
+  <button onclick="resetTier()">♻️ Reset</button>
+
 </div>
 
-<div class="tier"><span>S</span><div class="dropzone" data-tier="S"></div></div>
-<div class="tier"><span>A</span><div class="dropzone" data-tier="A"></div></div>
-<div class="tier"><span>B</span><div class="dropzone" data-tier="B"></div></div>
-<div class="tier"><span>C</span><div class="dropzone" data-tier="C"></div></div>
-<div class="tier"><span>POOL</span><div class="dropzone" data-tier="pool"></div></div>
+<!-- 🔥 MAIN TIERS CONTAINER -->
+<div id="tiers"></div>
 
+<!-- SCRIPT -->
 <script src="script.js"></script>
+
 </body>
 </html>
