@@ -1,58 +1,76 @@
 body {
   margin:0;
   font-family: Arial;
-  background:#111;
+  background:#0f0f0f;
   color:white;
-  text-align:center;
 }
 
-h1 { margin:10px; }
+h1 {
+  text-align:center;
+}
 
 .topbar {
   display:flex;
   gap:10px;
   justify-content:center;
   flex-wrap:wrap;
-  margin-bottom:10px;
+  margin:10px;
 }
 
 input, button {
   padding:8px;
-  border:none;
   border-radius:6px;
+  border:none;
 }
 
-.tier-container {
-  width:95%;
-  margin:auto;
+button {
+  background:#333;
+  color:white;
+  cursor:pointer;
+}
+
+button:hover {
+  background:#555;
 }
 
 .tier {
   display:flex;
-  align-items:center;
-  margin:10px 0;
+  margin:10px;
+  border-radius:8px;
+  overflow:hidden;
 }
 
 .tier span {
   width:60px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   font-weight:bold;
-  font-size:20px;
 }
+
+.tier:nth-child(1) span { background:#ff595e; }
+.tier:nth-child(2) span { background:#ff924c; }
+.tier:nth-child(3) span { background:#ffca3a; }
+.tier:nth-child(4) span { background:#8ac926; }
+.tier:nth-child(5) span { background:#1982c4; }
 
 .dropzone {
   flex:1;
-  min-height:90px;
-  background:#222;
-  border:2px dashed #444;
+  background:#1a1a1a;
+  min-height:100px;
   display:flex;
   flex-wrap:wrap;
-  gap:5px;
-  padding:5px;
+  gap:6px;
+  padding:6px;
 }
 
 .card {
   width:70px;
-  cursor:grab;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.08);
 }
 
 .card img {
@@ -61,10 +79,14 @@ input, button {
 }
 
 .card div {
-  font-size:12px;
+  font-size:11px;
+  text-align:center;
 }
 
-/* 📱 Mobile */
+.card.dragging {
+  opacity:0.5;
+}
+
 @media(max-width:600px){
   .card { width:55px; }
   .tier span { width:40px; }
