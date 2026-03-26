@@ -34,7 +34,6 @@ button:hover {
   background:#444;
 }
 
-/* 🔥 TIER */
 .tier {
   display:flex;
   align-items:center;
@@ -55,11 +54,8 @@ button:hover {
   margin-left:5px;
   background:red;
   color:white;
-  border:none;
-  cursor:pointer;
 }
 
-/* 🔥 DROP ZONE */
 .dropzone {
   flex:1;
   background:#1a1a1a;
@@ -70,19 +66,13 @@ button:hover {
   padding:6px;
 }
 
-/* 🔥 CARD */
 .card {
   width:70px;
   cursor: grab;
-  transition: transform 0.2s;
 }
 
 .card:active {
   cursor: grabbing;
-}
-
-.card:hover {
-  transform: scale(1.08);
 }
 
 .card img {
@@ -95,12 +85,10 @@ button:hover {
   text-align:center;
 }
 
-/* DRAGGING */
 .card.dragging {
   opacity:0.5;
 }
 
-/* 📱 MOBILE */
 @media(max-width:600px){
   .card { width:55px; }
   .tier span { width:40px; }
