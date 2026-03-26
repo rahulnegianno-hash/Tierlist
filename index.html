@@ -1,38 +1,148 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tierlist Maker</title>
+<title>Tierlist</title>
 
-<link rel="stylesheet" href="style.css">
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<style>
+body {
+  background:#111;
+  color:white;
+  font-family:Arial;
+}
+
+/* TIER ROW */
+.tier {
+  display:flex;
+  margin:10px;
+  background:#222;
+  border-radius:8px;
+}
+
+/* LABEL */
+.tier span {
+  width:60px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+}
+
+/* DROP AREA */
+.dropzone {
+  flex:1;
+  display:flex;
+
+  flex-direction: row;   /* 🔥 horizontal fix */
+  flex-wrap: wrap;       /* 🔥 wrap instead of overflow */
+
+  gap:8px;
+  padding:10px;
+}
+
+/* CARD */
+.card {
+  width:70px;
+  cursor:grab;
+}
+
+.card img {
+  width:100%;
+  border-radius:6px;
+}
+
+.card.dragging {
+  opacity:0.5;
+}
+</style>
 </head>
 
 <body>
 
-<h1>🔥 Tierlist Maker</h1>
-<p class="subtitle">Drag • Rank • Share</p>
+<h2>Tierlist</h2>
 
-<div class="topbar">
-  <input id="search" placeholder="Search characters...">
-  <input type="file" id="upload" multiple accept="image/*">
-
-  <button onclick="addTier()">➕ Add Tier</button>
-  <button onclick="downloadImage()">📸 Download</button>
-  <button onclick="exportData()">💾 Export</button>
-  <button onclick="getShareLink()">🔗 Share</button>
-
-  <label class="import-btn">
-    📂 Import
-    <input type="file" onchange="importData(event)" hidden>
-  </label>
-
-  <button onclick="resetTier()">♻️ Reset</button>
-</div>
+<input type="file" id="upload" multiple>
 
 <div id="tiers"></div>
 
-<script src="script.js"></script>
+<script>
+let chars = [];
+let dragged = null;
+
+const tiers = ["S","A","B","C","pool"];
+
+function render(){
+  const container = document.getElementById("tiers");
+  container.innerHTML = "";
+
+  tiers.forEach(tier=>{
+    const div = document.createElement("div");
+    div.className = "tier";
+
+    div.innerHTML = `
+      <span>${tier}</span>
+      <div class="dropzone" data-tier="${tier}"></div>
+    `;
+
+    container.appendChild(div);
+  });
+
+  chars.forEach(c=>{
+    const zone = document.querySelector(`[data-tier="${c.tier}"]`);
+
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `<img src="${c.img}">`;
+
+    card.draggable = true;
+
+    card.addEventListener("dragstart", ()=>{
+      dragged = c;
+      card.classList.add("dragging");
+    });
+
+    card.addEventListener("dragend", ()=>{
+      card.classList.remove("dragging");
+    });
+
+    zone.appendChild(card);
+  });
+
+  document.querySelectorAll(".dropzone").forEach(zone=>{
+    zone.addEventListener("dragover", e=>{
+      e.preventDefault();
+    });
+
+    zone.addEventListener("drop", ()=>{
+      if(!dragged) return;
+
+      dragged.tier = zone.dataset.tier;
+      dragged = null;
+
+      render();
+    });
+  });
+}
+
+/* UPLOAD */
+document.getElementById("upload").addEventListener("change", e=>{
+  Array.from(e.target.files).forEach(file=>{
+    const reader = new FileReader();
+
+    reader.onload = ev=>{
+      chars.push({
+        img: ev.target.result,
+        tier: "pool"
+      });
+      render();
+    };
+
+    reader.readAsDataURL(file);
+  });
+});
+
+render();
+</script>
+
 </body>
 </html>
