@@ -49,11 +49,13 @@ button, .import-btn {
   background: rgba(0,0,0,0.4);
   min-height:120px;
 
-  display:grid;   /* 🔥 CHANGE */
-  grid-template-columns: repeat(auto-fill, 70px);
-
+  display:flex;
+  flex-wrap: nowrap;     /* 🔥 ek line me */
   gap:8px;
   padding:10px;
+
+  align-items:center;
+  overflow-x: auto;      /* 🔥 scroll left-right */
 }
 .card {
   width:70px;
