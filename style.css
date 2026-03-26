@@ -1,169 +1,73 @@
 body {
   margin:0;
-  font-family: 'Segoe UI', Arial;
-  background: linear-gradient(135deg,#0f0f0f,#1a1a2e);
+  font-family: Arial;
+  background:#111;
   color:white;
 }
 
-/* TITLE */
-h1 {
+h1, .subtitle {
   text-align:center;
-  margin:15px;
-  font-size:32px;
 }
 
-/* SUBTITLE */
-.subtitle{
-  text-align:center;
-  color:#aaa;
-  margin-top:-10px;
-  margin-bottom:10px;
-  font-size:14px;
-}
-
-/* TOPBAR */
 .topbar {
   display:flex;
+  flex-wrap:wrap;
   gap:10px;
   justify-content:center;
-  flex-wrap:wrap;
   margin:10px;
 }
 
-/* INPUT + BUTTON */
 input, button {
-  padding:8px 12px;
-  border-radius:8px;
+  padding:8px;
   border:none;
-  outline:none;
+  border-radius:6px;
 }
 
-/* INPUT */
-input {
-  background:#1f1f1f;
-  color:white;
-}
-
-/* BUTTON */
 button, .import-btn {
-  background: linear-gradient(135deg,#2a2a2a,#3a3a3a);
+  background:#333;
   color:white;
   cursor:pointer;
-  transition:0.2s;
 }
 
-/* HOVER */
-button:hover, .import-btn:hover {
-  transform: translateY(-2px);
-  background: linear-gradient(135deg,#444,#666);
-}
-
-/* IMPORT BTN */
-.import-btn{
-  display:inline-block;
-}
-
-/* TIER ROW */
 .tier {
   display:flex;
-  align-items:center;
-  margin:12px;
-  border-radius:12px;
-  overflow:hidden;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  margin:10px;
+  background:#222;
+  border-radius:10px;
 }
 
-/* TIER LABEL */
 .tier span {
   width:70px;
-  min-height:120px;
   display:flex;
   align-items:center;
   justify-content:center;
   font-weight:bold;
-  font-size:18px;
 }
 
-/* DELETE BUTTON */
-.tier button {
-  margin-left:5px;
-  background:red;
-  border-radius:6px;
-  padding:4px 8px;
-}
-
-/* COLOR PICKER */
-.tier input[type="color"] {
-  width:35px;
-  height:35px;
-  border:none;
-  cursor:pointer;
-  margin-left:5px;
-}
-
-/* 🔥 FIXED DROPZONE */
 .dropzone {
   flex:1;
-  background: rgba(0,0,0,0.4);
-  min-height:120px;
   display:flex;
-  flex-wrap: nowrap;      /* 🔥 IMPORTANT */
   gap:8px;
   padding:10px;
-  align-items:flex-start;
-  overflow-x: auto;       /* 🔥 SCROLL */
+  overflow-x:auto;
 }
 
-/* CARD */
 .card {
-  width:75px;
-  flex-shrink:0;          /* 🔥 IMPORTANT */
-  cursor: grab;
-  transition:0.2s;
+  width:70px;
+  flex-shrink:0;
+  cursor:grab;
 }
 
-/* HOVER */
-.card:hover {
-  transform: scale(1.1);
-}
-
-/* IMAGE */
 .card img {
   width:100%;
-  border-radius:10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+  border-radius:8px;
 }
 
-/* NAME */
 .card div {
-  font-size:11px;
+  font-size:10px;
   text-align:center;
-  margin-top:3px;
-  color:#ddd;
-  word-break:break-word;
 }
 
-/* DRAGGING */
 .card.dragging {
   opacity:0.5;
-  transform: scale(1.1);
-}
-
-/* SCROLLBAR (optional sexy 😏) */
-.dropzone::-webkit-scrollbar {
-  height:6px;
-}
-.dropzone::-webkit-scrollbar-thumb {
-  background:#666;
-  border-radius:10px;
-}
-
-/* MOBILE */
-@media(max-width:600px){
-  .card { width:60px; }
-  .tier span { width:50px; font-size:14px; }
-  .topbar { gap:6px; }
-  input, button { padding:6px 8px; font-size:12px; }
 }
