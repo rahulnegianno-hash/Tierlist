@@ -7,6 +7,7 @@ body {
 
 h1 {
   text-align:center;
+  margin:10px;
 }
 
 .topbar {
@@ -24,17 +25,19 @@ input, button {
 }
 
 button {
-  background:#333;
+  background:#222;
   color:white;
   cursor:pointer;
 }
 
 button:hover {
-  background:#555;
+  background:#444;
 }
 
+/* 🔥 TIER */
 .tier {
   display:flex;
+  align-items:center;
   margin:10px;
   border-radius:8px;
   overflow:hidden;
@@ -48,25 +51,34 @@ button:hover {
   font-weight:bold;
 }
 
-.tier:nth-child(1) span { background:#ff595e; }
-.tier:nth-child(2) span { background:#ff924c; }
-.tier:nth-child(3) span { background:#ffca3a; }
-.tier:nth-child(4) span { background:#8ac926; }
-.tier:nth-child(5) span { background:#1982c4; }
+.tier button {
+  margin-left:5px;
+  background:red;
+  color:white;
+  border:none;
+  cursor:pointer;
+}
 
+/* 🔥 DROP ZONE */
 .dropzone {
   flex:1;
   background:#1a1a1a;
-  min-height:100px;
+  min-height:120px;
   display:flex;
   flex-wrap:wrap;
   gap:6px;
   padding:6px;
 }
 
+/* 🔥 CARD */
 .card {
   width:70px;
+  cursor: grab;
   transition: transform 0.2s;
+}
+
+.card:active {
+  cursor: grabbing;
 }
 
 .card:hover {
@@ -83,10 +95,12 @@ button:hover {
   text-align:center;
 }
 
+/* DRAGGING */
 .card.dragging {
   opacity:0.5;
 }
 
+/* 📱 MOBILE */
 @media(max-width:600px){
   .card { width:55px; }
   .tier span { width:40px; }
