@@ -48,17 +48,13 @@ button, .import-btn {
   flex:1;
   background: rgba(0,0,0,0.4);
   min-height:120px;
-  display:flex;
 
-  flex-wrap: wrap;        /* ✅ CHANGE */
+  display:grid;   /* 🔥 CHANGE */
+  grid-template-columns: repeat(auto-fill, 70px);
+
   gap:8px;
   padding:10px;
-
-  align-items:flex-start;
-
-  overflow-x: hidden;     /* ❌ remove horizontal scroll */
 }
-
 .card {
   width:70px;
   flex-shrink:0;
