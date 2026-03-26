@@ -4,23 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Tier List Maker</title>
+<title>Tierlist Maker</title>
 
 <link rel="stylesheet" href="style.css">
-
-<!-- html2canvas -->
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </head>
 
 <body>
 
-<h1>🔥 Tier List Maker</h1>
+<h1>🔥 Tierlist Maker</h1>
 
-<!-- 🔥 TOP BAR -->
 <div class="topbar">
 
   <input id="search" placeholder="Search characters...">
 
+  <!-- ✅ ONLY ONE UPLOAD -->
   <input type="file" id="upload" multiple>
 
   <button onclick="addTier()">➕ Add Tier</button>
@@ -31,16 +29,18 @@
 
   <button onclick="getShareLink()">🔗 Share</button>
 
-  <input type="file" onchange="importData(event)">
+  <!-- OPTIONAL IMPORT -->
+  <label style="background:#333;padding:6px;border-radius:6px;cursor:pointer;">
+    📂 Import
+    <input type="file" onchange="importData(event)" hidden>
+  </label>
 
   <button onclick="resetTier()">♻️ Reset</button>
 
 </div>
 
-<!-- 🔥 MAIN TIERS CONTAINER -->
 <div id="tiers"></div>
 
-<!-- SCRIPT -->
 <script src="script.js"></script>
 
 </body>
