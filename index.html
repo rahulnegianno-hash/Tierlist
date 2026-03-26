@@ -5,93 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tier List Maker</title>
 
-<!-- CSS -->
 <link rel="stylesheet" href="style.css">
-
-<!-- html2canvas -->
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-
-<style>
-/* 🔥 Quick UI Upgrade (extra polish) */
-body {
-  margin:0;
-  font-family: Arial;
-  background:#111;
-  color:white;
-  text-align:center;
-}
-
-h1 {
-  margin:10px;
-}
-
-.topbar {
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  flex-wrap:wrap;
-  margin-bottom:10px;
-}
-
-input, button {
-  padding:8px;
-  border:none;
-  border-radius:6px;
-}
-
-button {
-  cursor:pointer;
-  background:#444;
-  color:white;
-}
-
-button:hover {
-  background:#666;
-}
-
-.tier {
-  display:flex;
-  align-items:center;
-  margin:10px;
-}
-
-.tier span {
-  width:60px;
-  font-weight:bold;
-  font-size:20px;
-}
-
-.dropzone {
-  flex:1;
-  min-height:100px;
-  background:#222;
-  border:2px dashed #444;
-  display:flex;
-  flex-wrap:wrap;
-  gap:5px;
-  padding:5px;
-}
-
-.card {
-  width:70px;
-}
-
-.card img {
-  width:100%;
-  border-radius:6px;
-}
-
-.card div {
-  font-size:12px;
-}
-
-/* 📱 Mobile */
-@media(max-width:600px){
-  .card { width:55px; }
-  .tier span { width:40px; }
-}
-</style>
-
 </head>
 
 <body>
@@ -99,40 +14,18 @@ button:hover {
 <h1>🔥 Tier List Maker</h1>
 
 <div class="topbar">
-  <input id="search" placeholder="Search character...">
-  <input type="file" id="upload">
+  <input id="search" placeholder="Search...">
+  <input type="file" id="upload" multiple>
   <button onclick="downloadImage()">Download</button>
   <button onclick="resetTier()">Reset</button>
 </div>
 
-<!-- TIERS -->
-<div class="tier">
-  <span>S</span>
-  <div class="dropzone" data-tier="S"></div>
-</div>
+<div class="tier"><span>S</span><div class="dropzone" data-tier="S"></div></div>
+<div class="tier"><span>A</span><div class="dropzone" data-tier="A"></div></div>
+<div class="tier"><span>B</span><div class="dropzone" data-tier="B"></div></div>
+<div class="tier"><span>C</span><div class="dropzone" data-tier="C"></div></div>
+<div class="tier"><span>POOL</span><div class="dropzone" data-tier="pool"></div></div>
 
-<div class="tier">
-  <span>A</span>
-  <div class="dropzone" data-tier="A"></div>
-</div>
-
-<div class="tier">
-  <span>B</span>
-  <div class="dropzone" data-tier="B"></div>
-</div>
-
-<div class="tier">
-  <span>C</span>
-  <div class="dropzone" data-tier="C"></div>
-</div>
-
-<div class="tier">
-  <span>POOL</span>
-  <div class="dropzone" data-tier="pool"></div>
-</div>
-
-<!-- JS -->
 <script src="script.js"></script>
-
 </body>
 </html>
